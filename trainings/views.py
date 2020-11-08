@@ -8,5 +8,10 @@ def trainings_view(request):
     return render(request, 'trainings.html', {'all_trainings': all_trainings})
     
 
-def single_training_view(request):
-    pass
+def single_training_view(request, pk):
+    training = Training.objects.get(id=pk)
+    return render(
+        request, 
+        'single-training.html', 
+        {'training': training}
+        )

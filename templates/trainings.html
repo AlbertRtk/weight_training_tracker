@@ -2,6 +2,10 @@
 
 <ul>
     {% for training in all_trainings %}
-        <li>{{training.name}}</li>
+        <li>
+            <a href="/trainings/{{training.id}}">
+                {{training.name}}
+            </a>
+        </li>
     {% endfor %}
 </ul>
