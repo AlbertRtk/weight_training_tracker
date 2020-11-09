@@ -1,0 +1,16 @@
+<h1>New training</h1>
+
+{% if training.time_start %}
+    {{ training.time_start }}
+{% else %}
+    <a href="/start-training/{{training.id}}">Start training</a>
+{% endif %}
+
+{% if training.time_end %}
+    {{ training.time_end }}
+{% else %}
+    <a href="/stop-training/{{training.id}}">Stop training</a>
+{% endif %}
+
+<a href="/save-training/{{training.id}}">Save</a>
+<a href="/cancel-training/{{training.id}}">Cancel</a>

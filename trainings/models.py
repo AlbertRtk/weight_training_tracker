@@ -3,8 +3,8 @@ from django.db import models
 # Create your models here.
 class Training(models.Model):
     name = 'My weight trainig'
-    time_start = models.DateTimeField()
-    time_end = models.DateTimeField()
+    time_start = models.DateTimeField(blank=True, null=True)
+    time_end = models.DateTimeField(blank=True, null=True)
 
 
 class Exercise(models.Model):
