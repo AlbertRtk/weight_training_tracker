@@ -1,16 +1,26 @@
 <h1>New training</h1>
 
+<!-- show start time and stop button, or start button -->
 {% if training.time_start %}
     {{ training.time_start }}
+
+    <!-- show end time or stop button -->
+    {% if training.time_end %}
+        {{ training.time_end }}
+    {% else %}
+        <a href="/stop-training/{{training.id}}">Stop</a>
+    {% endif %}
+
 {% else %}
-    <a href="/start-training/{{training.id}}">Start training</a>
+    <a href="/start-training/{{training.id}}">Start</a>
+{% endif %}
+<br />
+
+
+
+<br />
+{% if training.time_start and training.time_end %}
+    <a href="/save-training/{{training.id}}">Save</a>
 {% endif %}
 
-{% if training.time_end %}
-    {{ training.time_end }}
-{% else %}
-    <a href="/stop-training/{{training.id}}">Stop training</a>
-{% endif %}
-
-<a href="/save-training/{{training.id}}">Save</a>
 <a href="/cancel-training/{{training.id}}">Cancel</a>
