@@ -13,7 +13,7 @@ class Exercise(models.Model):
     weight_kg = models.FloatField()
     weight_def = models.TextField()
     series = models.IntegerField()  # max 4
-    reps_s1 = models.IntegerField()
-    reps_s2 = models.IntegerField()
-    reps_s3 = models.IntegerField()
-    reps_s4 = models.IntegerField()
+    reps_s1 = models.IntegerField(blank=True)
+    reps_s2 = models.IntegerField(blank=True)
+    reps_s3 = models.IntegerField(blank=True)
+    reps_s4 = models.IntegerField(blank=True)
