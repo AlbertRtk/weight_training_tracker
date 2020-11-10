@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from .models import Training
+from .models import Training, Exercise
 from datetime import datetime
 
 
@@ -62,3 +62,11 @@ def cancel_training(request, training_id):
     training = Training.objects.get(id=training_id)
     training.delete()
     return HttpResponseRedirect('/trainings/')
+
+
+def add_exercise_to_training(request, training_id):
+    training = Training.objects.get(id=training_id)
+    exercise = Exercise()
+    exercise.training = training
+    exercise.save()
+    return HttpResponseRedirect(f'/edit-training/{training_id}/')

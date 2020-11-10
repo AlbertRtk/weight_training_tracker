@@ -9,11 +9,11 @@ class Training(models.Model):
 
 class Exercise(models.Model):
     training = models.ForeignKey('Training', on_delete=models.CASCADE)
-    name = models.TextField()
-    weight_kg = models.FloatField()
-    weight_def = models.TextField()
-    series = models.IntegerField()  # max 4
-    reps_s1 = models.IntegerField(blank=True)
-    reps_s2 = models.IntegerField(blank=True)
-    reps_s3 = models.IntegerField(blank=True)
-    reps_s4 = models.IntegerField(blank=True)
+    name = models.TextField(default='Exercise')
+    weight_kg = models.FloatField(blank=True, null=True)
+    weight_def = models.TextField(blank=True, null=True)
+    series = models.IntegerField(blank=True, null=True)  # max 4
+    reps_s1 = models.IntegerField(blank=True, null=True)
+    reps_s2 = models.IntegerField(blank=True, null=True)
+    reps_s3 = models.IntegerField(blank=True, null=True)
+    reps_s4 = models.IntegerField(blank=True, null=True)
