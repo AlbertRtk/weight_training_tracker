@@ -31,10 +31,11 @@ def record_training(request):
 
 def edit_training_view(request, training_id):
     training = Training.objects.get(id=training_id)
+    exercises = Exercise.objects.filter(training__id=training_id)
     return render(
         request,
         'edit-training.html',
-        {'training': training}
+        {'training': training, 'exercises': exercises}
     )
 
 

@@ -18,7 +18,11 @@
 {% endif %}
 <br />
 
-
+{% if exercises %}
+    {% for exercise in exercises %}
+        {{ exercise.name }} <br />
+    {% endfor %}
+{% endif %}
 
 <br />
 <a href="/cancel-training/{{training.id}}">Cancel</a>
