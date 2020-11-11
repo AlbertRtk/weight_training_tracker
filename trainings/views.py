@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from .models import Training, Exercise
-from datetime import datetime
+from django.utils import timezone
 
 
 def trainings_view(request):
@@ -40,7 +40,7 @@ def edit_training_view(request, training_id):
 
 def start_training(request, training_id):
     training = Training.objects.get(id=training_id)
-    training.time_start = datetime.now()
+    training.time_start = timezone.now()
     training.save()
     return HttpResponseRedirect(f'/edit-training/{training_id}/')
     
@@ -48,7 +48,8 @@ def start_training(request, training_id):
 def stop_training(request, training_id):
     # save the end time
     training = Training.objects.get(id=training_id)
-    training.time_end = datetime.now()
+    training.time_end = timezone.now()
+    training.duration = training.time_end - training.time_start
     training.save()
 
     # make sure to save all exercises and progress

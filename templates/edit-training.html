@@ -15,11 +15,12 @@
     
                         {% if training.time_start %}
                             <!-- straining started - show start -->
-                            <li>Start: {{ training.time_start|date:'Y-m-d H:i' }}</li>
+                            <li><b>Start:</b> {{ training.time_start|date:'Y-m-d H:i' }}</li>
     
                             {% if training.time_end %}
                                 <!-- training is over - show end time -->
-                                <li>End: {{ training.time_end|date:'Y-m-d H:i' }}</li>
+                                <li><b>End:</b> {{ training.time_end|date:'Y-m-d H:i' }}</li>
+                                <li><b>Duration:</b> {{ training.duration }}</li>
                             {% endif %}
                         
                         {% endif %}
@@ -77,23 +78,55 @@
                                 </div>
                             {% endfor %}
 
-                            {% if training.time_start and not training.time_end %}
                             <!-- training started - show stop button -->
-                            <br />
-                            <input type="submit" class="stop" value="Stop"/>
-
-                        {% endif %}
+                            {% if training.time_start and not training.time_end %}
+                                <br />
+                                
+                                <div class="control_buttons">
+                                    <div class="form_input">    
+                                        <input type="submit" class="stop" value="Stop"/>
+                                    </div>
+                                    <!-- training can be canceled at any point -->
+                                    <div class="form_input">
+                                        <a href="/cancel-training/{{training.id}}/" class="button_link">Cancel</a>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </form>
 
-
                             
+                        <!-- training have not started yet - start button -->
                         {% if not training.time_start %}
-                            <!-- training have not started yet - start button -->
-                            <form action="/start-training/{{training.id}}/" method="POST">{% csrf_token %}
-                                <input type="submit" class="start" value="Start"/>
-                            </form>
+                            <div class="control_buttons">
+                                <div class="form_input">    
+                                    <form action="/start-training/{{training.id}}/" method="POST">{% csrf_token %}
+                                        <input type="submit" class="start" value="Start"/>
+                                    </form>
+                                </div>
+                                <!-- training can be canceled at any point -->
+                                <div class="form_input">
+                                    <a href="/cancel-training/{{training.id}}/" class="button_link">Cancel</a>
+                                </div>
+                            </div>
                         {% endif %}
 
+
+                        
+                        <!-- training can be saved only if it started and finished -->
+                        {% if training.time_start and training.time_end %}
+                            <div class="control_buttons">
+                                <div class="form_input"> 
+                                    <a href="/save-training/{{training.id}}/" class="button_link">Save</a>
+                                </div>
+                                <!-- training can be canceled at any point -->
+                                <div class="form_input">
+                                    <a href="/cancel-training/{{training.id}}/" class="button_link">Cancel</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <p class="div_label">So empty! Add some exercises to the training!</p>
+                        <a href="/cancel-training/{{training.id}}/" class="button_link">Cancel</a>
                     {% endif %}<!-- exercises -->
                 </div>
 
@@ -137,17 +170,9 @@
                 {% endif %}
                 
 
+                
 
-                <br/>
-                <!-- training can be canceled at any point -->
-                <div>
-                    <a href="/cancel-training/{{training.id}}">Cancel</a>
-                </div>
-
-                <!-- training can be saved only if it started and finished -->
-                {% if training.time_start and training.time_end %}
-                    <a href="/save-training/{{training.id}}">Save</a>
-                {% endif %}
+                
             </section>
         </div>
     </body>
