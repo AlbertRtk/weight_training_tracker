@@ -1,13 +1,19 @@
-<h1>Trainings</h1>
+{% extends 'base.html' %}
 
-<a href="/record-training/">New training</a>
+{% block content %}
 
-<ul>
-    {% for training in all_trainings %}
-        <li>
-            <a href="/trainings/{{training.id}}">
-                {{training.name}}
-            </a>
-        </li>
-    {% endfor %}
-</ul>
+    <h1>Trainings</h1>
+
+    <a href="/record-training/">New training</a>
+
+    <ul>
+        {% for training in all_trainings %}
+            <li>
+                <a href="/trainings/{{training.id}}">
+                    {{training.name}}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

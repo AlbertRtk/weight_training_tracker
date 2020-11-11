@@ -1,0 +1,23 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>Weight Training Tracker</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+
+        <div class="wrapper">
+            <header>
+                <h1>Weight Training Tracker</h1>
+            </header>
+
+            <section>
+
+                {% block content %}
+                {% endblock %}
+                         
+            </section>
+        </div>
+    </body>
+</html>

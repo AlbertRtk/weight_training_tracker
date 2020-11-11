@@ -1,5 +1,11 @@
-<h1>{{ training.name }}</h1>
-{{ training.time_start }}
+{% extends 'base.html' %}
 
-<br />
-<a href="/trainings/">My trainings</a>
+{% block content %}
+
+    <h1>{{ training.name }}</h1>
+    {{ training.time_start }}
+    
+    <br />
+    <a href="/trainings/">My trainings</a>
+
+{% endblock %}
