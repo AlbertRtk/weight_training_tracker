@@ -1,74 +1,144 @@
-<h1>New training</h1>
+{% load static %}
 
-{% if exercises %}
+<html>
+    <head>
+        <title>Training</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
 
-    {% if training.time_start %}
-        <!-- straining started - show start -->
-        {{ training.time_start }}
-    {% else %}
-        <!-- training have not started yet - start button -->
-        <form action="/start-training/{{training.id}}/" method="POST">{% csrf_token %}
-            <input type="submit" value="Start"/>
-        </form>
-    {% endif %}
-    <br />
-
-
-    <form action="/stop-training/{{training.id}}/" method="POST">{% csrf_token %}
-        
-        {% if training.time_end %}
-            <!-- training is over - show end time -->
-            {{ training.time_end }}
-        {% elif training.time_start %}
-            <!-- training started - show stop button -->
-            <input type="submit" value="Stop"/>
-        {% else %}
-            <!-- show nothing -->
-        {% endif %}
-    
-        <br />
-
-        <!-- show exercises -->
-        {% for exercise in exercises %}
-            <input type="text" name="name_{{exercise.id}}" value="{{exercise.name}}"/>
-            <input type="text" name="weight_kg_{{exercise.id}}" value="{{exercise.weight_kg}}"/>
-            <input type="text" name="weight_per_{{exercise.id}}" value="{{exercise.weight_per}}"/>
-
-            {% for r in exercise.reps %}
-                <input type="text" name="rep_{{r}}" value=""/>
-            {% endfor %}
+        <div class="wrapper">
+            <header>
+                <h1>Training</h1>
+            </header>
             
-            <br />
-        {% endfor %}
+            <section>
 
-    </form>
+                <div class="exercises_form">
 
-{% endif %}<!-- exercises -->
+                    {% if exercises %}
 
-
-{% if training.time_start %}
-    <!-- show nothing -->
-{% else %}
-    <!-- show add exercise button -->
-    <form action="/add-exercise/{{training.id}}/" method="POST">{% csrf_token %}
-        <input type="text" name="name" value="Exercise"/>
-        <input type="number" name="weight_kg" value="0" step="0.5"/>
-        <select id="cars" name="weight_per">
-            <option value="total">total</option>
-            <option value="per_hand">per hand</option>
-        </select>
-        <input type="number" name="series" value="1" step="1" min="1" max="4">
-        <input type="submit" value="Add"/>
-    </form>
-{% endif %}
+                        {% if training.time_start %}
+                            <!-- straining started - show start -->
+                            {{ training.time_start }}
+                        {% else %}
+                            <!-- training have not started yet - start button -->
+                            <form action="/start-training/{{training.id}}/" method="POST">{% csrf_token %}
+                                <input type="submit" class="start" value="Start"/>
+                            </form>
+                        {% endif %}
 
 
-<br />
-<!-- training can be canceled at any point -->
-<a href="/cancel-training/{{training.id}}">Cancel</a>
+                        <form action="/stop-training/{{training.id}}/" method="POST">{% csrf_token %}
+
+                            {% if training.time_end %}
+                                <!-- training is over - show end time -->
+                                {{ training.time_end }}
+                            {% elif training.time_start %}
+                                <!-- training started - show stop button -->
+                                <input type="submit" class="stop" value="Stop"/>
+                            {% else %}
+                                <!-- show nothing -->
+                            {% endif %}
+                        
+                            <br />
+
+                            <!-- show labels for exercises -->
+                            <div class="labels_row"> 
+                                <div class="exercises_label exercise_name">Exercise name</div>
+                                <div class="exercises_label number_input">Weight</div>
+                                <div class="exercises_label selector">&nbsp;</div>
+                                <div class="exercises_label number_input">Series</div>
+                            </div>
+
+                            <!-- show exercises -->
+                            {% for exercise in exercises %}
+                                <div class="exercise_row">
+                                    <div class="form_input">
+                                        <input type="text" class="exercise_name" name="name_{{exercise.id}}" value="{{exercise.name}}"/>
+                                    </div>
+                                    <div class="form_input">
+                                        <input type="number" class="number_input" name="weight_kg_{{exercise.id}}" min="0" step="0.1" value="{{exercise.weight_kg}}"/>
+                                    </div>
+                                    <div class="form_input">
+                                        <select class="selector" name="weight_per_{{exercise.id}}">
+                                            {% if "total" == exercise.weight_per %}
+                                                <option value="total">total</option>
+                                                <option value="per hand">per hand</option>
+                                            {% else %}
+                                                <option value="per hand">per hand</option>
+                                                <option value="total">total</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+
+                                    {% for r in exercise.reps %}
+                                        <div class="form_input">
+                                            <input type="number" class="number_input" name="rep_{{r}}" value="" min="0" step="1"/>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+
+                        </form>
+                    {% else %}
+                        <br />
+                    {% endif %}<!-- exercises -->
+                </div>
 
 
-<!-- training can be saved only if it started and finished -->
-{% if training.time_start and training.time_end %}
-    <a href="/save-training/{{training.id}}">Save</a>
-{% endif %}
+                <!-- Add exercise form -->
+                <br />
+                <div class="add_form">
+                    {% if training.time_start %}
+                        <!-- show nothing -->
+                    {% else %}
+                        <p class="div_label">Add exercise to the training</p>
+                        <!-- show add exercise button -->
+                        <form action="/add-exercise/{{training.id}}/" method="POST">{% csrf_token %}
+                            <div class="form_input">
+                                <label for="add_name">Exercise name</label><br />
+                                <input type="text" class="exercise_name" id="add_name" name="name" value="Exercise"/>
+                            </div>
+
+                            <div class="form_input">
+                                <label for="add_weight_kg">Weight</label><br />
+                                <input type="number" id="add_weight_kg" class="number_input" name="weight_kg" min="0" value="0.0" step="0.1"/>
+                            </div>
+
+                            <div class="form_input">
+                                <label for="add_weight_per">&nbsp;</label><br />
+                                <select name="weight_per" class="selector" id="add_weight_per">
+                                    <option value="total">total</option>
+                                    <option value="per hand">per hand</option>
+                                </select>
+                            </div>
+
+                            <div class="form_input">
+                                <label for="add_series">Series</label><br />
+                                <input type="number" class="number_input" id="add_series" name="series" value="3" step="1" min="1" max="8">
+                            </div>
+
+                            <div class="form_input">
+                                <label for="add_submit">&nbsp;</label><br />
+                                <input type="submit" id="add_submit" value="Add"/>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+
+
+                <br/>
+                <!-- training can be canceled at any point -->
+                <div>
+                    <a href="/cancel-training/{{training.id}}">Cancel</a>
+                </div>
+
+                <!-- training can be saved only if it started and finished -->
+                {% if training.time_start and training.time_end %}
+                    <a href="/save-training/{{training.id}}">Save</a>
+                {% endif %}
+            </section>
+        </div>
+    </body>
+</html>
