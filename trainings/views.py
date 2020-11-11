@@ -57,6 +57,11 @@ def stop_training(request, training_id):
         exercise.name = request.POST[f'name_{exercise.id}']
         exercise.weight_kg = request.POST[f'weight_kg_{exercise.id}']
         exercise.weight_per = request.POST[f'weight_per_{exercise.id}']
+
+        # read and save reps in all series
+        for s in range(int(exercise.series)):
+            exercise.reps[s] = request.POST[f'rep_{s}']
+
         exercise.save()
 
     return HttpResponseRedirect(f'/edit-training/{training_id}/')
@@ -65,6 +70,7 @@ def stop_training(request, training_id):
 def save_training(request, training_id):
     training = Training.objects.get(id=training_id)
     training.save()
+    # exercises have been already saved in stop_training
     return HttpResponseRedirect(f'/trainings/{training_id}/')
 
 
@@ -84,6 +90,10 @@ def add_exercise_to_training(request, training_id):
     exercise.weight_kg = request.POST['weight_kg']
     exercise.weight_per = request.POST['weight_per']
     exercise.series = request.POST['series']
+    exercise.reps = dict()
+
+    for s in range(int(exercise.series)):
+        exercise.reps[s] = 0
 
     exercise.save()
 

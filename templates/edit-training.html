@@ -33,6 +33,11 @@
             <input type="text" name="name_{{exercise.id}}" value="{{exercise.name}}"/>
             <input type="text" name="weight_kg_{{exercise.id}}" value="{{exercise.weight_kg}}"/>
             <input type="text" name="weight_per_{{exercise.id}}" value="{{exercise.weight_per}}"/>
+
+            {% for r in exercise.reps %}
+                <input type="text" name="rep_{{r}}" value=""/>
+            {% endfor %}
+            
             <br />
         {% endfor %}
 
