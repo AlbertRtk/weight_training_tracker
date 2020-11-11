@@ -133,6 +133,25 @@ a.button_link:link, a.button_link:visited {
     display: inline-block;
   }
   
-  a.button_link:hover, a.button_link:active {
+a.button_link:hover, a.button_link:active {
     background-color: #f1f1f1;
-  }
+}
+
+table, td, th {  
+    border: 0px;
+    text-align: left;
+    margin-top: 30px;
+}
+  
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+th, td {
+    padding: 10px;
+}
+
+th {
+    background-color: #f1f1f1;
+}

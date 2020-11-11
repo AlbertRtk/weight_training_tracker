@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from .models import Training, Exercise
 from django.utils import timezone
+from django.db.models import Sum
 
 
 def trainings_view(request):
@@ -15,10 +16,11 @@ def trainings_view(request):
 
 def single_training_view(request, training_id):
     training = Training.objects.get(id=training_id)
+    exercises = Exercise.objects.filter(training__id=training_id)
     return render(
         request, 
         'single-training.html', 
-        {'training': training}
+        {'training': training, 'exercises': exercises}
         )
 
 
@@ -60,7 +62,7 @@ def stop_training(request, training_id):
         exercise.weight_per = request.POST[f'weight_per_{exercise.id}']
 
         # read and save reps in all series
-        for s in range(int(exercise.series)):
+        for s in exercise.reps:
             exercise.reps[s] = request.POST[f'rep_{s}']
 
         exercise.save()
@@ -93,7 +95,15 @@ def add_exercise_to_training(request, training_id):
     exercise.series = request.POST['series']
     exercise.reps = dict()
 
-    for s in range(int(exercise.series)):
+    """ Html form displays all sereis for all exercises in the training 
+        therefore we need unique keys for each of the reps series. Before 
+        setting the keys for reps series, cout total number of the series
+        in the training and use the sum as the starting id for series 
+        in next exercise. """
+    this_training_exercises = Exercise.objects.filter(training__id=training_id)
+    series_count = this_training_exercises.aggregate(Sum('series'))['series__sum']
+    series_count = series_count if series_count else 0
+    for s in range(series_count, series_count+int(exercise.series)):
         exercise.reps[s] = 0
 
     exercise.save()

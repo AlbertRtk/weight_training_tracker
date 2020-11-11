@@ -3,9 +3,29 @@
 {% block content %}
 
     <h1>{{ training.name }}</h1>
-    {{ training.time_start }}
+
+    <ul class="training_times">
+        <li><b>Start:</b> {{ training.time_start|date:'Y-m-d H:i' }}</li>
+        <li><b>End:</b> {{ training.time_end|date:'Y-m-d H:i' }}</li>
+        <li><b>Duration:</b> {{ training.duration }}</li>
+    </ul>
+
     
-    <br />
-    <a href="/trainings/">My trainings</a>
+    <table>
+        <th>Exercise</th>
+        <th colspan="2">Weight</th>
+        <th colspan="8">Series</th>
+        {% for exercise in exercises %}
+            <tr>
+                <td>{{ exercise.name }}</td>
+                <td>{{ exercise.weight_kg }} kg</td>
+                <td>{{ exercise.weight_per }}</td>
+                {% for r in exercise.reps.values %}
+                    <td>{{r}}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    
 
 {% endblock %}

@@ -2,18 +2,20 @@
 
 {% block content %}
 
-    <h1>Trainings</h1>
-
     <a href="/record-training/">New training</a>
 
-    <ul>
+    <h1>My trainings</h1>
+    <table>
+        <th>Training</th>
+        <th>Date</th>
+        <th>Duration</th>
         {% for training in all_trainings %}
-            <li>
-                <a href="/trainings/{{training.id}}">
-                    {{training.name}}
-                </a>
-            </li>
+            <tr>
+                <td><a href="/trainings/{{training.id}}">{{training.name}}</a></td>
+                <td>{{ training.time_start|date:'Y-m-d' }}</td>
+                <td>{{ training.duration }}</td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 
 {% endblock %}
