@@ -10,7 +10,12 @@
         <div class="wrapper">
             <header>
                 <h1>Training</h1>
-                <ul id="training_times">
+            </header>
+            
+
+            <section>
+
+                <ul class="training_times">
                     {% if exercises %}
     
                         {% if training.time_start %}
@@ -27,10 +32,6 @@
     
                     {% endif %}
                 </ul>
-            </header>
-            
-
-            <section>
 
                 <div class="exercises_form">
                     {% if exercises %}
@@ -68,10 +69,10 @@
                                             {% endif %}
                                         </select>
                                     </div>
-
-                                    {% for r in exercise.reps %}
+                                    
+                                    {% for k, v in exercise.reps.items %}
                                         <div class="form_input">
-                                            <input type="number" class="number_input" name="rep_{{r}}" value="" min="0" step="1"/>
+                                            <input type="number" class="number_input" name="rep_{{k}}" value="{{v}}" min="0" step="1"/>
                                         </div>
                                     {% endfor %}
 

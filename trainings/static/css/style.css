@@ -20,21 +20,21 @@ header {
     padding: 10px 50px 10px 50px;
 }
 
-header ul#training_times {
+section {
+    padding: 10px 50px 10px 50px;
+}
+
+ul.training_times {
     display: block;
-    height: 30px;
+    height: 10px;
     list-style: none;
     padding: 0px 0px 0px 0px;
     margin: 0px;
 }
 
-header ul#training_times li {
+ul.training_times li {
    display: inline;
    padding: 0px 45px 0px 5px;
-}
-
-section {
-    padding: 10px 50px 10px 50px;
 }
 
 input, select {
