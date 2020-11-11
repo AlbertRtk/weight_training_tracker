@@ -10,38 +10,30 @@
         <div class="wrapper">
             <header>
                 <h1>Training</h1>
+                <ul id="training_times">
+                    {% if exercises %}
+    
+                        {% if training.time_start %}
+                            <!-- straining started - show start -->
+                            <li>Start: {{ training.time_start|date:'Y-m-d H:i' }}</li>
+    
+                            {% if training.time_end %}
+                                <!-- training is over - show end time -->
+                                <li>End: {{ training.time_end|date:'Y-m-d H:i' }}</li>
+                            {% endif %}
+                        
+                        {% endif %}
+    
+                    {% endif %}
+                </ul>
             </header>
             
+
             <section>
 
                 <div class="exercises_form">
-
                     {% if exercises %}
-
-                        {% if training.time_start %}
-                            <!-- straining started - show start -->
-                            {{ training.time_start }}
-                        {% else %}
-                            <!-- training have not started yet - start button -->
-                            <form action="/start-training/{{training.id}}/" method="POST">{% csrf_token %}
-                                <input type="submit" class="start" value="Start"/>
-                            </form>
-                        {% endif %}
-
-
                         <form action="/stop-training/{{training.id}}/" method="POST">{% csrf_token %}
-
-                            {% if training.time_end %}
-                                <!-- training is over - show end time -->
-                                {{ training.time_end }}
-                            {% elif training.time_start %}
-                                <!-- training started - show stop button -->
-                                <input type="submit" class="stop" value="Stop"/>
-                            {% else %}
-                                <!-- show nothing -->
-                            {% endif %}
-                        
-                            <br />
 
                             <!-- show labels for exercises -->
                             <div class="labels_row"> 
@@ -51,15 +43,19 @@
                                 <div class="exercises_label number_input">Series</div>
                             </div>
 
+
                             <!-- show exercises -->
                             {% for exercise in exercises %}
                                 <div class="exercise_row">
+                                    
                                     <div class="form_input">
                                         <input type="text" class="exercise_name" name="name_{{exercise.id}}" value="{{exercise.name}}"/>
                                     </div>
+
                                     <div class="form_input">
                                         <input type="number" class="number_input" name="weight_kg_{{exercise.id}}" min="0" step="0.1" value="{{exercise.weight_kg}}"/>
                                     </div>
+
                                     <div class="form_input">
                                         <select class="selector" name="weight_per_{{exercise.id}}">
                                             {% if "total" == exercise.weight_per %}
@@ -77,22 +73,35 @@
                                             <input type="number" class="number_input" name="rep_{{r}}" value="" min="0" step="1"/>
                                         </div>
                                     {% endfor %}
+
                                 </div>
                             {% endfor %}
 
+                            {% if training.time_start and not training.time_end %}
+                            <!-- training started - show stop button -->
+                            <br />
+                            <input type="submit" class="stop" value="Stop"/>
+
+                        {% endif %}
                         </form>
-                    {% else %}
-                        <br />
+
+
+                            
+                        {% if not training.time_start %}
+                            <!-- training have not started yet - start button -->
+                            <form action="/start-training/{{training.id}}/" method="POST">{% csrf_token %}
+                                <input type="submit" class="start" value="Start"/>
+                            </form>
+                        {% endif %}
+
                     {% endif %}<!-- exercises -->
                 </div>
 
 
-                <!-- Add exercise form -->
-                <br />
-                <div class="add_form">
-                    {% if training.time_start %}
-                        <!-- show nothing -->
-                    {% else %}
+                <!-- Add exercise form -->             
+                {% if not training.time_start %}
+                    <br />
+                    <div class="add_form">
                         <p class="div_label">Add exercise to the training</p>
                         <!-- show add exercise button -->
                         <form action="/add-exercise/{{training.id}}/" method="POST">{% csrf_token %}
@@ -124,8 +133,9 @@
                                 <input type="submit" id="add_submit" value="Add"/>
                             </div>
                         </form>
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
+                
 
 
                 <br/>
