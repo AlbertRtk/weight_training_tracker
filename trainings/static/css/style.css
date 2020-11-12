@@ -29,12 +29,42 @@ ul.training_times {
     height: 10px;
     list-style: none;
     padding: 0px 0px 0px 0px;
-    margin: 0px;
+    margin: 40px 0px 20px 0px;
 }
 
 ul.training_times li {
    display: inline;
    padding: 0px 45px 0px 5px;
+}
+
+nav {
+    margin-top: 40px;
+}
+
+nav ul {
+    display: block;
+    list-style: none;
+}
+
+nav li {
+   display: inline;
+}
+
+nav li a:link, nav li a:visited {
+    color: black;
+    font-size: larger;
+    text-decoration: none;
+    background-color: rgb(60, 200, 255);
+    color: black;
+    height: 22px;
+    padding: 9px;
+    margin: 5px;
+  }
+  
+nav li a:hover, nav li a:active {
+    background-color: rgb(90, 202, 247);
+    color: black;
+    text-decoration: none;
 }
 
 input, select {
@@ -92,7 +122,7 @@ div.add_form {
 }
 
 div.exercises_form {
-    margin-top: 50px;
+    margin-top: 40px;
 }
 
 p.div_label {

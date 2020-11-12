@@ -7,6 +7,7 @@ from django.db.models import Sum
 
 def trainings_view(request):
     all_trainings = Training.objects.all()
+    all_trainings = all_trainings[::-1]
     return render(
         request, 
         'trainings.html', 
