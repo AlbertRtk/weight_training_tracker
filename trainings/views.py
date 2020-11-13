@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from .models import Training, Exercise
+from .models import Training, Exercise, TrainingPlan
 from django.utils import timezone
 from django.db.models import Sum
 
@@ -110,3 +110,22 @@ def add_exercise_to_training(request, training_id):
     exercise.save()
 
     return HttpResponseRedirect(f'/edit-training/{training_id}/')
+
+
+def save_training_plan(request, training_id):
+    training_plan = TrainingPlan()
+    plan_table = []
+    
+    exercises = Exercise.objects.filter(training__id=training_id)
+    for exercise in exercises:
+        plan_table.append(
+            {
+                'name': request.POST[f'name_{exercise.id}',
+                'weight_kg': request.POST[f'weight_kg_{exercise.id}'],
+                'weight_per': request.POST[f'weight_per_{exercise.id}']
+            }
+        )
+
+    training_plan.name = 'My training plan'  # https://www.w3schools.com/howto/howto_js_collapsible.asp
+    training_plan.exercises = plan_table
+    training_plan.save()
