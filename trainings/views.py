@@ -120,7 +120,7 @@ def save_training_plan(request, training_id):
     for exercise in exercises:
         plan_table.append(
             {
-                'name': request.POST[f'name_{exercise.id}',
+                'name': request.POST[f'name_{exercise.id}'],
                 'weight_kg': request.POST[f'weight_kg_{exercise.id}'],
                 'weight_per': request.POST[f'weight_per_{exercise.id}']
             }
