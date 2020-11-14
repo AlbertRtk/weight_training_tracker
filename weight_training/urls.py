@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from trainings.views import trainings_view, single_training_view, \
     edit_training_view, start_training, stop_training, save_training, \
-    cancel_training, record_training, add_exercise_to_training
+    cancel_training, record_training, add_exercise_to_training, \
+    save_training_plan, load_training_plan
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,4 +31,6 @@ urlpatterns = [
     path('save-training/<int:training_id>/', save_training),
     path('cancel-training/<int:training_id>/', cancel_training),
     path('add-exercise/<int:training_id>/', add_exercise_to_training),
+    path('save-training-plan/<int:training_id>/', save_training_plan),
+    path('load-training-plan/<int:training_id>/', load_training_plan),
 ]

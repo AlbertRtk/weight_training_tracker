@@ -34,10 +34,11 @@ def record_training(request):
 def edit_training_view(request, training_id):
     training = Training.objects.get(id=training_id)
     exercises = Exercise.objects.filter(training__id=training_id)
+    training_plans = TrainingPlan.objects.all()
     return render(
         request,
         'edit-training.html',
-        {'training': training, 'exercises': exercises}
+        {'training': training, 'exercises': exercises, 'training_plans': training_plans}
     )
 
 
@@ -73,8 +74,15 @@ def stop_training(request, training_id):
 
 def save_training(request, training_id):
     training = Training.objects.get(id=training_id)
-    training.save()
-    # exercises have been already saved in stop_training
+    training.save()  # exercises have been already saved in stop_training
+
+    if training.plan:
+        # make sure to update training plan, 
+        # we want to keep saved the most recent values for weights
+        training_plan = training.plan
+        training_plan = training_to_training_plan(training_id, training_plan)
+        training_plan.save()
+
     return HttpResponseRedirect(f'/trainings/{training_id}/')
 
 
@@ -114,18 +122,61 @@ def add_exercise_to_training(request, training_id):
 
 def save_training_plan(request, training_id):
     training_plan = TrainingPlan()
+    training_plan.name = request.POST['name']
+    training = Training.objects.get(id=training_id)
+    training.plan = training_plan
+
+    training_plan = training_to_training_plan(training_id, training_plan)
+
+    training_plan.save()
+    training.save()
+
+    return HttpResponseRedirect(f'/edit-training/{training_id}/')
+
+
+def load_training_plan(request, training_id):
+    training = Training.objects.get(id=training_id)
+    plan_id = request.POST['selected_plan_id']
+    training_plan = TrainingPlan.objects.get(id=plan_id)
+    training.plan = training_plan
+    training.save()
+
+    series_count = 0
+
+    for plan_exercise in training_plan.exercises:
+        new_exercise = Exercise()
+        new_exercise.training = training
+        new_exercise.name = plan_exercise['name']
+        new_exercise.weight_kg = plan_exercise['weight_kg']
+        new_exercise.weight_per = plan_exercise['weight_per']
+        new_exercise.series = plan_exercise['series']
+        new_exercise.reps = dict()
+
+        new_series_count = series_count + int(new_exercise.series)
+        for s in range(series_count, new_series_count):
+            new_exercise.reps[s] = 0
+        series_count = new_series_count
+
+        new_exercise.save()
+
+    return HttpResponseRedirect(f'/edit-training/{training_id}/')
+
+
+# =============================================================================
+def training_to_training_plan(training_id, training_plan):
+    exercises = Exercise.objects.filter(training__id=training_id)
     plan_table = []
     
-    exercises = Exercise.objects.filter(training__id=training_id)
     for exercise in exercises:
         plan_table.append(
             {
-                'name': request.POST[f'name_{exercise.id}'],
-                'weight_kg': request.POST[f'weight_kg_{exercise.id}'],
-                'weight_per': request.POST[f'weight_per_{exercise.id}']
+                'name': exercise.name,
+                'weight_kg': exercise.weight_kg,
+                'weight_per': exercise.weight_per,
+                'series': exercise.series
             }
         )
 
-    training_plan.name = 'My training plan'  # https://www.w3schools.com/howto/howto_js_collapsible.asp
     training_plan.exercises = plan_table
-    training_plan.save()
+
+    return training_plan

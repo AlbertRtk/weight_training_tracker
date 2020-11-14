@@ -73,7 +73,7 @@ input, select {
     margin: 5px
 }
 
-.exercise_name {
+.name_fiels {
     width: 180px;
 }
 
@@ -85,8 +85,12 @@ input, select {
     width: 100px;
 }
 
+.selector_wide {
+    width: 410px;
+}
+
 input[type=submit] {
-    width: 80px;
+    min-width: 80px;
     font-size: larger;
     border: 0px;
 }
@@ -147,7 +151,7 @@ div.exercises_label {
 }
 
 div.control_buttons {
-    height: 50px;
+    height: 70px;
 }
 
 a.button_link:link, a.button_link:visited {

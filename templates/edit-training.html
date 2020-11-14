@@ -38,7 +38,7 @@
 
                             <!-- show labels for exercises -->
                             <div class="labels_row"> 
-                                <div class="exercises_label exercise_name">Exercise name</div>
+                                <div class="exercises_label name_fiels">Exercise name</div>
                                 <div class="exercises_label number_input">Weight</div>
                                 <div class="exercises_label selector">&nbsp;</div>
                                 <div class="exercises_label number_input">Series</div>
@@ -50,7 +50,7 @@
                                 <div class="exercise_row">
 
                                     <div class="form_input">
-                                        <input type="text" class="exercise_name" name="name_{{exercise.id}}" value="{{exercise.name}}"/>
+                                        <input type="text" class="name_fiels" name="name_{{exercise.id}}" value="{{exercise.name}}" readonly/>
                                     </div>
 
                                     <div class="form_input">
@@ -132,7 +132,7 @@
 
 
                 <!-- Add exercise form -->             
-                {% if not training.time_start %}
+                {% if not training.time_start and not training.plan %}
                     <br />
                     <div class="add_form">
                         <p class="div_label">Add exercise to the training</p>
@@ -140,7 +140,7 @@
                         <form action="/add-exercise/{{training.id}}/" method="POST">{% csrf_token %}
                             <div class="form_input">
                                 <label for="add_name">Exercise name</label><br />
-                                <input type="text" class="exercise_name" id="add_name" name="name" value="Exercise"/>
+                                <input type="text" class="name_fiels" id="add_name" name="name" value="Exercise"/>
                             </div>
 
                             <div class="form_input">
@@ -167,6 +167,46 @@
                             </div>
                         </form>
                     </div>
+
+                    {% if exercises %}
+                        <div class="add_form">
+                            <p class="div_label">Save as training plan</p>
+                            <!-- show save as training plan form -->
+                            <form action="/save-training-plan/{{training.id}}/" method="POST">{% csrf_token %}
+                                <div class="form_input">
+                                    <label for="plan_name">Training plan name</label><br />
+                                    <input type="text" class="name_fiels" id="plan_name" name="name" value="My training plan"/>
+                                </div>
+
+                                <div class="form_input">
+                                    <label for="save_plan">&nbsp;</label><br />
+                                    <input type="submit" id="save_plan" value="Save"/>
+                                </div>
+                            </form>
+                        </div>
+                    {% elif training_plans %}
+                        <div class="add_form">
+                            <!-- show load as training plan form -->
+                            <form action="/load-training-plan/{{training.id}}/" method="POST">{% csrf_token %}
+                                <div class="form_input">
+                                    <label for="select_plan">Load training plan</label><br />
+                                    <select name="selected_plan_id" class="selector_wide" id="select_plan">
+                                        {% for plan in training_plans %}
+                                            <option value="{{plan.id}}">{{ plan.name }}</option>
+                                        {% endfor %}
+                                    </select>    
+                                </div>
+
+                                <div class="form_input">
+                                    <label for="load_plan">&nbsp;</label><br />
+                                    <input type="submit" id="load_plan" value="Load"/>
+                                </div>
+                            </form>
+                        </div>
+                    {% else %}
+                        <!-- show nothing -->
+                    {% endif %}
+
                 {% endif %}
                 
             </section>
