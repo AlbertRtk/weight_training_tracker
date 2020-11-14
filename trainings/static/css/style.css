@@ -73,7 +73,7 @@ input, select {
     margin: 5px
 }
 
-.name_fiels {
+.name_fields {
     width: 180px;
 }
 
@@ -85,7 +85,11 @@ input, select {
     width: 100px;
 }
 
-.selector_wide {
+.input_mid {
+    width: 350px;
+}
+
+.input_wide {
     width: 410px;
 }
 
@@ -93,6 +97,18 @@ input[type=submit] {
     min-width: 80px;
     font-size: larger;
     border: 0px;
+}
+
+button {
+    height: 40px;
+    margin: 5px;
+    min-width: 80px;
+    font-size: larger;
+    border: 0px;   
+}
+
+input[type=submit]:hover, button:hover {
+    background-color: #f1f1f1;
 }
 
 input[type=submit].start {
@@ -152,23 +168,6 @@ div.exercises_label {
 
 div.control_buttons {
     height: 70px;
-}
-
-a.button_link:link, a.button_link:visited {
-    background-color: #f1f1f1;
-    color: black;
-    height: 22px;
-    width: 62px;
-    padding: 9px;
-    margin: 5px;
-    text-align: center;
-    font-size: larger;
-    text-decoration: none;
-    display: inline-block;
-  }
-  
-a.button_link:hover, a.button_link:active {
-    background-color: #f1f1f1;
 }
 
 table, td, th {  

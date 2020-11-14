@@ -74,6 +74,7 @@ def stop_training(request, training_id):
 
 def save_training(request, training_id):
     training = Training.objects.get(id=training_id)
+    training.name = request.POST['name']
     training.save()  # exercises have been already saved in stop_training
 
     if training.plan:

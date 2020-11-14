@@ -38,7 +38,7 @@
 
                             <!-- show labels for exercises -->
                             <div class="labels_row"> 
-                                <div class="exercises_label name_fiels">Exercise name</div>
+                                <div class="exercises_label name_fields">Exercise name</div>
                                 <div class="exercises_label number_input">Weight</div>
                                 <div class="exercises_label selector">&nbsp;</div>
                                 <div class="exercises_label number_input">Series</div>
@@ -50,7 +50,7 @@
                                 <div class="exercise_row">
 
                                     <div class="form_input">
-                                        <input type="text" class="name_fiels" name="name_{{exercise.id}}" value="{{exercise.name}}" readonly/>
+                                        <input type="text" class="name_fields" name="name_{{exercise.id}}" value="{{exercise.name}}" readonly/>
                                     </div>
 
                                     <div class="form_input">
@@ -88,7 +88,7 @@
                                     </div>
                                     <!-- training can be canceled at any point -->
                                     <div class="form_input">
-                                        <a href="/cancel-training/{{training.id}}/" class="button_link">Cancel</a>
+                                        <form><button formaction="/cancel-training/{{training.id}}/">Cancel</button></form>
                                     </div>
                                 </div>
                             {% endif %}
@@ -105,7 +105,7 @@
                                 </div>
                                 <!-- training can be canceled at any point -->
                                 <div class="form_input">
-                                    <a href="/cancel-training/{{training.id}}/" class="button_link">Cancel</a>
+                                    <form><button formaction="/cancel-training/{{training.id}}/">Cancel</button></form>
                                 </div>
                             </div>
                         {% endif %}
@@ -114,19 +114,24 @@
                         
                         <!-- training can be saved only if it started and finished -->
                         {% if training.time_start and training.time_end %}
-                            <div class="control_buttons">
-                                <div class="form_input"> 
-                                    <a href="/save-training/{{training.id}}/" class="button_link">Save</a>
-                                </div>
+                            <div class="control_buttons">   
+                                <form action="/save-training/{{training.id}}/" method="POST">{% csrf_token %}
+                                    <div class="form_input">
+                                        <input type="text" class="input_mid" name="name" value="My weight training"/>
+                                    </div>
+                                    <div class="form_input">
+                                        <input type="submit" id="save_training" value="Save"/>
+                                    </div>
+                                </form>
                                 <!-- training can be canceled at any point -->
                                 <div class="form_input">
-                                    <a href="/cancel-training/{{training.id}}/" class="button_link">Cancel</a>
+                                    <form><button formaction="/cancel-training/{{training.id}}/">Cancel</button></form>
                                 </div>
                             </div>
                         {% endif %}
                     {% else %}
                         <p class="div_label">So empty! Add some exercises to the training!</p>
-                        <a href="/cancel-training/{{training.id}}/" class="button_link">Cancel</a>
+                        <form><button formaction="/cancel-training/{{training.id}}/">Cancel</button></form>
                     {% endif %}<!-- exercises -->
                 </div>
 
@@ -140,7 +145,7 @@
                         <form action="/add-exercise/{{training.id}}/" method="POST">{% csrf_token %}
                             <div class="form_input">
                                 <label for="add_name">Exercise name</label><br />
-                                <input type="text" class="name_fiels" id="add_name" name="name" value="Exercise"/>
+                                <input type="text" class="name_fields" id="add_name" name="name" value="Exercise"/>
                             </div>
 
                             <div class="form_input">
@@ -175,7 +180,7 @@
                             <form action="/save-training-plan/{{training.id}}/" method="POST">{% csrf_token %}
                                 <div class="form_input">
                                     <label for="plan_name">Training plan name</label><br />
-                                    <input type="text" class="name_fiels" id="plan_name" name="name" value="My training plan"/>
+                                    <input type="text" class="input_wide" id="plan_name" name="name" value="My training plan"/>
                                 </div>
 
                                 <div class="form_input">
@@ -190,7 +195,7 @@
                             <form action="/load-training-plan/{{training.id}}/" method="POST">{% csrf_token %}
                                 <div class="form_input">
                                     <label for="select_plan">Load training plan</label><br />
-                                    <select name="selected_plan_id" class="selector_wide" id="select_plan">
+                                    <select name="selected_plan_id" class="input_wide" id="select_plan">
                                         {% for plan in training_plans %}
                                             <option value="{{plan.id}}">{{ plan.name }}</option>
                                         {% endfor %}
