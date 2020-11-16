@@ -188,3 +188,51 @@ th, td {
 th {
     background-color: #f1f1f1;
 }
+
+.dropdown_button {
+    background-color: white;
+    font-size: larger;
+    min-width: auto;
+    width:30px;
+    height: 30px;
+    margin: 0px;
+    height: auto;
+    border: none;
+    cursor: pointer;
+  }
+
+.dropdown_button:hover {
+      background-color: white;
+  }
+  
+.dropdown {
+    position: relative;
+    float:right;
+}
+  
+.dropdown_content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    z-index: 1;
+    margin: 0px;
+    left: 30px;
+    top: 10px;
+  }
+  
+.dropdown_content a {
+    background-color: #f9f9f9;
+    min-width: 80px;
+    color: black;
+    padding: 5px;
+    text-decoration: none;
+    display: block;
+}
+  
+.dropdown_content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown_content {
+    display: block;
+}

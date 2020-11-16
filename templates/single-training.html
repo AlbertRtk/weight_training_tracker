@@ -1,8 +1,19 @@
+<!DOCTYPE html>
 {% extends 'base.html' %}
 
 {% block content %}
 
+    <div class="dropdown">
+        <button class="dropdown_button">&raquo;</button>
+        <div class="dropdown_content">
+            <!--<a href="/edit-training/{{training.id}}/">Edit</a>-->
+            <a href="/delete-training/{{training.id}}/">Delete</a>
+        </div>
+    </div>
+
     <h1>{{ training.name }}</h1>
+    
+    
 
     <ul class="training_times">
         <li><b>Start:</b> {{ training.time_start|date:'Y-m-d H:i' }}</li>

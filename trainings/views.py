@@ -87,11 +87,15 @@ def save_training(request, training_id):
     return HttpResponseRedirect(f'/trainings/{training_id}/')
 
 
-def cancel_training(request, training_id):
+def delete_training(request, training_id):
     training = Training.objects.get(id=training_id)
     training.delete()
     # exercises in the training will be deleted to (Foreign Key - CASCADE)
     return HttpResponseRedirect('/trainings/')
+
+
+def cancel_training(request, training_id):
+    return delete_training(request, training_id)
 
 
 def add_exercise_to_training(request, training_id):
