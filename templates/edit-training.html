@@ -1,4 +1,5 @@
 {% load static %}
+{% load trainings_templatetags %}
 
 <html>
     <head>
@@ -24,7 +25,7 @@
                             {% if training.time_end %}
                                 <!-- training is over - show end time -->
                                 <li><b>End:</b> {{ training.time_end|date:'Y-m-d H:i' }}</li>
-                                <li><b>Duration:</b> {{ training.duration }}</li>
+                                <li><b>Duration:</b> {{ training.duration|round_dt }}</li>
                             {% endif %}
 
                         {% endif %}

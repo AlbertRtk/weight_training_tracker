@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load trainings_templatetags %}
 
 {% block content %}
     <h1>My trainings</h1>
@@ -10,7 +11,7 @@
             <tr>
                 <td><a href="/trainings/{{training.id}}">{{training.name}}</a></td>
                 <td>{{ training.time_start|date:'Y-m-d' }}</td>
-                <td>{{ training.duration }}</td>
+                <td>{{ training.duration|round_dt }}</td>
             </tr>
         {% endfor %}
     </table>

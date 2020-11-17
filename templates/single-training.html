@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 {% extends 'base.html' %}
+{% load trainings_templatetags %}
 
 {% block content %}
 
@@ -18,7 +18,7 @@
     <ul class="training_times">
         <li><b>Start:</b> {{ training.time_start|date:'Y-m-d H:i' }}</li>
         <li><b>End:</b> {{ training.time_end|date:'Y-m-d H:i' }}</li>
-        <li><b>Duration:</b> {{ training.duration }}</li>
+        <li><b>Duration:</b> {{ training.duration|round_dt }}</li>
     </ul>
 
     
