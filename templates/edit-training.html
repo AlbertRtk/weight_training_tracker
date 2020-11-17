@@ -20,11 +20,11 @@
 
                         {% if training.time_start %}
                             <!-- straining started - show start -->
-                            <li><b>Start:</b> {{ training.time_start|date:'Y-m-d H:i' }}</li>
+                            <li><b>Start:</b> {{ training.time_start|date:'H:i' }}</li>
 
                             {% if training.time_end %}
                                 <!-- training is over - show end time -->
-                                <li><b>End:</b> {{ training.time_end|date:'Y-m-d H:i' }}</li>
+                                <li><b>End:</b> {{ training.time_end|date:'H:i' }}</li>
                                 <li><b>Duration:</b> {{ training.duration|round_dt }}</li>
                             {% endif %}
 
