@@ -22,6 +22,8 @@ Run the server and open http://127.0.0.1:8000/ in your browser.
 python3 manage.py runserver
 ```
 
+---
+
 ## Views in the app
 
 ### My trainings
