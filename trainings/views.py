@@ -174,7 +174,6 @@ def progress_analysis_view(request):
     all_exercises_names = Exercise.objects.values('name').distinct()
     
     exercise_name = request.POST.get('select_exercise_name', None)
-    print(exercise_name)
 
     if exercise_name is None:
         exercise_name = all_exercises_names[0]['name']
