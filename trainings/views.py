@@ -170,18 +170,33 @@ def load_training_plan(request, training_id):
 
 
 # =============================================================================
-def progress_analysis(request):
-    data = get_exercise_summary_in_dict('Biceps curl')
-    plot_div = get_progress_plot(data)
+def progress_analysis_view(request):
+    all_exercises_names = Exercise.objects.values('name').distinct()
+    
+    exercise_name = request.POST.get('select_exercise_name', None)
+    print(exercise_name)
 
-    return render(request, 'progress-analysis.html', context={'plot_div': plot_div})
+    if exercise_name is None:
+        exercise_name = all_exercises_names[0]['name']
+    
+    data = get_exercise_summary_in_dict(exercise_name)
+    plot_div = get_progress_plot(data, exercise_name)
+
+    return render(request, 'progress-analysis.html', 
+                  context={'plot_div': plot_div, 
+                           'exercises_names': all_exercises_names,
+                           'selected_exercise_name': exercise_name})
 
 
-def get_progress_plot(data):
+def get_progress_plot(data, exercise_name):
     # scale factor for marker size in the graph
     # marker_size = marker_factor * exercise.weight
     marker_factor = 5
-    marker_size = [marker_factor*w for w in data['Weight']]
+
+    if all(data['Weight']):
+        marker_size = [marker_factor*w for w in data['Weight']]
+    else: 
+        marker_size = [marker_factor*marker_factor for _ in data['Weight']]
 
     figs = []
 
@@ -191,14 +206,16 @@ def get_progress_plot(data):
             go.Scatter(x=data['Date'], 
                        y=val,
                        mode='markers', 
+                       opacity=0.8,
                        marker_size=marker_size,
                        hovertext=data['Weight'],
                        hovertemplate='Date: %{x} <br>Reps: %{y} <br>Weight: %{hovertext}',
-                       name='Rep '+k)
+                       name='Series '+k)
         )
 
     # layout settings
     layout = {
+        'title': exercise_name,
         'yaxis_title': 'Repetitions',
         'height': 600,
         }

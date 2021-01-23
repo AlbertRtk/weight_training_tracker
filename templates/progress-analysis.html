@@ -2,6 +2,27 @@
 {% load trainings_templatetags %}
 
 {% block content %}
+    <div class="progress_form">
+        <form action="/progress-analysis/" method="POST">{% csrf_token %}
+            <div class="form_input">
+                <label for="select_exercise">Show progress in</label><br />
+                <select name="select_exercise_name" class="input_wide" id="select_exercise">
+                    {% for ex in exercises_names %}
+                        {% if selected_exercise_name == ex.name %}
+                            <option value="{{ex.name}}" selected>{{ ex.name }}</option>
+                        {% else %}
+                            <option value="{{ex.name}}">{{ ex.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>    
+            </div>
+
+            <div class="form_input">
+                <label for="show_summary">&nbsp;</label><br />
+                <input type="submit" id="show_summary" value="Show"/>
+            </div>
+        </form>
+    </div>
 
     {% autoescape off %}
         {{ plot_div }}

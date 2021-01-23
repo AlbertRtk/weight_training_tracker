@@ -141,6 +141,10 @@ div.add_form {
     height: 120px;
 }
 
+div.progress_form {
+    height: 80px;
+}
+
 div.exercises_form {
     margin-top: 40px;
 }

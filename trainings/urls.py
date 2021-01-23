@@ -2,7 +2,7 @@ from django.urls import path
 from .views import trainings_view, single_training_view, \
     edit_training_view, start_training, stop_training, save_training, \
     delete_training,    cancel_training, record_training, add_exercise_to_training, \
-    save_training_plan, load_training_plan, progress_analysis
+    save_training_plan, load_training_plan, progress_analysis_view
 
 
 urlpatterns = [
@@ -19,5 +19,5 @@ urlpatterns = [
     path('add-exercise/<int:training_id>/', add_exercise_to_training),
     path('save-training-plan/<int:training_id>/', save_training_plan),
     path('load-training-plan/<int:training_id>/', load_training_plan),
-    path('progress-analysis/', progress_analysis),
+    path('progress-analysis/', progress_analysis_view),
 ]
