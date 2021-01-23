@@ -3,6 +3,8 @@ from django.http import HttpResponseRedirect
 from .models import Training, Exercise, TrainingPlan
 from django.utils import timezone
 from django.db.models import Sum
+from plotly.offline import plot
+import plotly.graph_objects as go
 
 
 def trainings_view(request):
@@ -109,9 +111,9 @@ def add_exercise_to_training(request, training_id):
     exercise.series = request.POST['series']
     exercise.reps = dict()
 
-    """ Html form displays all sereis for all exercises in the training 
+    """ Html form displays all series for all exercises in the training 
         therefore we need unique keys for each of the reps series. Before 
-        setting the keys for reps series, cout total number of the series
+        setting the keys for reps series, count total number of the series
         in the training and use the sum as the starting id for series 
         in next exercise. """
     this_training_exercises = Exercise.objects.filter(training__id=training_id)
@@ -165,6 +167,64 @@ def load_training_plan(request, training_id):
         new_exercise.save()
 
     return HttpResponseRedirect(f'/edit-training/{training_id}/')
+
+
+# =============================================================================
+def progress_analysis(request):
+    data = get_exercise_summary_in_dict('Biceps curl')
+    plot_div = get_progress_plot(data)
+
+    return render(request, 'progress-analysis.html', context={'plot_div': plot_div})
+
+
+def get_progress_plot(data):
+    # scale factor for marker size in the graph
+    # marker_size = marker_factor * exercise.weight
+    marker_factor = 5
+    marker_size = [marker_factor*w for w in data['Weight']]
+
+    figs = []
+
+    # collect plots for all reps in on array
+    for k, val in data['Reps'].items():
+        figs.append(
+            go.Scatter(x=data['Date'], 
+                       y=val,
+                       mode='markers', 
+                       marker_size=marker_size,
+                       hovertext=data['Weight'],
+                       hovertemplate='Date: %{x} <br>Reps: %{y} <br>Weight: %{hovertext}',
+                       name='Rep '+k)
+        )
+
+    # layout settings
+    layout = {
+        'yaxis_title': 'Repetitions',
+        'height': 600,
+        }
+
+    return plot({'data':figs, 'layout': layout}, output_type='div')
+
+
+def get_exercise_summary_in_dict(exercise_name):
+    exercises = Exercise.objects.filter(name=exercise_name)
+
+    # dict with data to plot
+    data = {'Date': [], 'Reps': {}, 'Weight': []}
+
+    for ex in exercises:
+        data['Date'].append(ex.training.time_start.date())
+        data['Weight'].append(ex.weight_kg)
+
+        reps = list(ex.reps.values())
+
+        for i, r in enumerate(reps, 1):
+            if str(i) in data['Reps'].keys():
+                data['Reps'][str(i)].append(int(r))
+            else:
+                data['Reps'][str(i)] = [int(r)]
+    
+    return data
 
 
 # =============================================================================

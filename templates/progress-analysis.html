@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load trainings_templatetags %}
+
+{% block content %}
+
+    {% autoescape off %}
+        {{ plot_div }}
+    {% endautoescape %}
+
+{% endblock %}
