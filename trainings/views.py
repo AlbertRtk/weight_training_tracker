@@ -173,13 +173,20 @@ def load_training_plan(request, training_id):
 def progress_analysis_view(request):
     all_exercises_names = Exercise.objects.values('name').distinct()
     
-    exercise_name = request.POST.get('select_exercise_name', None)
-
-    if exercise_name is None:
-        exercise_name = all_exercises_names[0]['name']
+    if all_exercises_names:
     
-    data = get_exercise_summary_in_dict(exercise_name)
-    plot_div = get_progress_plot(data, exercise_name)
+        exercise_name = request.POST.get('select_exercise_name', None)
+
+        if exercise_name is None:
+            exercise_name = all_exercises_names[0]['name']
+
+        data = get_exercise_summary_in_dict(exercise_name)
+        plot_div = get_progress_plot(data, exercise_name)
+
+    else:
+        plot_div = None
+        exercise_name = None
+        all_exercises_names = None
 
     return render(request, 'progress-analysis.html', 
                   context={'plot_div': plot_div, 
