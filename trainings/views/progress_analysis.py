@@ -49,7 +49,7 @@ def get_progress_plot(data, exercise_name):
                        opacity=0.8,
                        marker_size=marker_size,
                        hovertext=data['Weight'],
-                       hovertemplate='Date: %{x} <br>Reps: %{y} <br>Weight: %{hovertext}',
+                       hovertemplate='Date: %{x} <br>Reps: %{y} <br>Weight: %{hovertext} kg',
                        name='Series '+k)
         )
 

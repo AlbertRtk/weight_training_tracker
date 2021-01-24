@@ -50,8 +50,8 @@ You can check your performance and details of your completed trainings.
 
 ![All trainings view](doc/img/training_details_view.jpg)
 
-<br />
+### Progress analysis view
 
-## Future development
+See your progress in graphs.
 
-* Visualization of training performance progress
+![Progress analysis view](doc/img/progress_analysis_view.jpg)
