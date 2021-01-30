@@ -6,6 +6,10 @@ import plotly.graph_objects as go
 
 def progress_analysis_view(request):
     all_exercises_names = Exercise.objects.values('name').distinct()
+    exercise_name = None 
+    progress_plot_div = ''
+    total_reps_plot_div = ''
+    weight_plot_div = ''
     
     if all_exercises_names:
     
@@ -15,17 +19,20 @@ def progress_analysis_view(request):
             exercise_name = all_exercises_names[0]['name']
 
         data = get_exercise_summary_in_dict(exercise_name)
-        plot_div = get_progress_plot(data, exercise_name)
 
-    else:
-        plot_div = None
-        exercise_name = None
-        all_exercises_names = None
+        progress_plot_div = get_progress_plot(data, exercise_name)
+        total_reps_plot_div = get_total_reps_plot(data, exercise_name)
+
+        if any(data['Weight']):
+            weight_plot_div = get_weight_plot(data, exercise_name)
+
+  
 
     return render(request, 'progress-analysis.html', 
-                  context={'plot_div': plot_div, 
-                           'exercises_names': all_exercises_names,
-                           'selected_exercise_name': exercise_name})
+                  context={'progress_plot_div': progress_plot_div, 
+                           'weight_plot_div': weight_plot_div,
+                           'total_reps_plot_div': total_reps_plot_div,
+                           'exercises_names': all_exercises_names})
 
 
 def get_progress_plot(data, exercise_name):
@@ -34,6 +41,9 @@ def get_progress_plot(data, exercise_name):
     marker_factor = 5
 
     if all(data['Weight']):
+        if any([w>marker_factor**2 for w in data['Weight']]):
+            # avoiding too big markers
+            marker_factor = marker_factor * marker_factor / data['Weight'][0]
         marker_size = [marker_factor*w for w in data['Weight']]
     else: 
         marker_size = [marker_factor*marker_factor for _ in data['Weight']]
@@ -57,7 +67,60 @@ def get_progress_plot(data, exercise_name):
     layout = {
         'title': exercise_name,
         'yaxis_title': 'Repetitions',
-        'height': 600,
+        'height': 500,
+        'xaxis_range': [data['Date'][0], data['Date'][-1]],
+        'margin': dict(b=25, r=0),
+        'legend': dict(orientation="h", yanchor="top", y=1.1, xanchor="left", x=0.0)
+        }
+
+    return plot({'data':figs, 'layout': layout}, output_type='div')
+
+
+def get_weight_plot(data, exercise_name):
+    figs = []
+
+    # 
+    figs = [
+        go.Scatter(x=data['Date'], 
+                   y=data['Weight'],
+                   mode='lines+markers', 
+                   opacity=1,
+                   hovertext=data['Weight'],
+                   hovertemplate='Date: %{x} <br>Weight: %{hovertext} kg')
+    ]
+
+    # layout settings
+    layout = {
+        'yaxis_title': 'Weight / kg',
+        'height': 200,
+        'xaxis_range': [data['Date'][0], data['Date'][-1]],
+        'margin': dict(t=25, b=25, r=0)
+        }
+
+    return plot({'data':figs, 'layout': layout}, output_type='div')
+
+
+def get_total_reps_plot(data, exercise_name):
+    total_reps = []
+    
+    # counting reps per training
+    for z in zip(*data['Reps'].values()):
+        total_reps.append(sum(z))
+
+    # 
+    figs = [
+        go.Bar(x=data['Date'], 
+               y=total_reps, 
+               opacity=1,
+               hovertext=data['Weight'],
+               hovertemplate='Date: %{x} <br>Total reps: %{y} <br>Weight: %{hovertext} kg')
+    ]
+
+    # layout settings
+    layout = {
+        'yaxis_title': 'Total reps count',
+        'height': 200,
+        'margin': dict(t=25, b=25, r=0)
         }
 
     return plot({'data':figs, 'layout': layout}, output_type='div')
