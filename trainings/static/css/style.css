@@ -240,3 +240,15 @@ th {
 .dropdown:hover .dropdown_content {
     display: block;
 }
+
+footer{
+    text-align: center;
+    font-size: small;
+    background-color: skyblue;
+    padding: 10px 50px 10px 50px;
+    margin-top: 50px;
+}
+
+footer a {
+    text-decoration: none;
+}
