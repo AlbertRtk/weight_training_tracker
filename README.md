@@ -16,7 +16,14 @@ cd weight_training_tracker
 Create new virtual environment and install requirements.
 ```bash
 python3 -m venv venv
+source venv/bin/activate
 python3 -m pip install -r requirements.txt
+```
+
+Create and apply migrations
+```bash
+python3 manage.py makemigrations
+python3 manage.py migrate
 ```
 
 Run the server and open http://127.0.0.1:8000/ in your browser.
